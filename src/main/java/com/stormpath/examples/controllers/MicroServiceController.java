@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Date;
+import java.util.UUID;
 
 @RestController
 public class MicroServiceController {
@@ -52,10 +53,10 @@ public class MicroServiceController {
         // create a new JWT with all this information
         String secret = client.getApiKey().getSecret();
         JwtBuilder jwtBuilder = Jwts.builder()
-            .setSubject(account.getEmail())
+            .setSubject(account.getHref())
             .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis()+(1000*60)));
-        jwtBuilder.claim("accountHref", account.getHref());
+            .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60)))
+            .setId(UUID.randomUUID().toString());
 
         String token = jwtBuilder.signWith(SignatureAlgorithm.HS512, secret.getBytes("UTF-8")).compact();
 
@@ -84,7 +85,7 @@ public class MicroServiceController {
         Jws<Claims> claims =
             Jwts.parser().setSigningKey(client.getApiKey().getSecret().getBytes("UTF-8")).parseClaimsJws(token);
 
-        String accountHref = (String) claims.getBody().get("accountHref");
+        String accountHref = claims.getBody().getSubject();
 
         // This should come from cache if we've done our job
         Account account = client.getResource(accountHref, Account.class);
