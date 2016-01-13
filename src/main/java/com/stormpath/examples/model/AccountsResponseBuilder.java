@@ -4,26 +4,26 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 
-public class AccountResponseBuilder {
+public class AccountsResponseBuilder {
     private String message;
     private AccountsResponse.STATUS status;
     private List<String> emails;
 
-    public static AccountResponseBuilder newInstance() {
-        return new AccountResponseBuilder();
+    public static AccountsResponseBuilder newInstance() {
+        return new AccountsResponseBuilder();
     }
 
-    public AccountResponseBuilder message(String message) {
+    public AccountsResponseBuilder message(String message) {
         this.message = message;
         return this;
     }
 
-    public AccountResponseBuilder status(AccountsResponse.STATUS status) {
+    public AccountsResponseBuilder status(AccountsResponse.STATUS status) {
         this.status = status;
         return this;
     }
 
-    public AccountResponseBuilder emails(List<String> emails) {
+    public AccountsResponseBuilder emails(List<String> emails) {
         this.emails = emails;
         return this;
     }

@@ -1,6 +1,6 @@
 package com.stormpath.examples.service;
 
-import com.stormpath.examples.model.AccountResponseBuilder;
+import com.stormpath.examples.model.AccountsResponseBuilder;
 import com.stormpath.examples.model.AccountsResponse;
 import com.stormpath.sdk.account.Account;
 import com.stormpath.sdk.application.Application;
@@ -23,18 +23,18 @@ public class AdminService {
         return account.isMemberOfGroup(adminGroupHref);
     }
 
-    public AccountsResponse getAccountsResponse(Account account) {
-        AccountResponseBuilder accountResponseBuilder = AccountResponseBuilder.newInstance();
+    public AccountsResponse buildAccountsResponse(Account account) {
+        AccountsResponseBuilder accountsResponseBuilder = AccountsResponseBuilder.newInstance();
         if (isAdmin(account)) {
             List<String> emails = new ArrayList<String>();
             for (Account acc : application.getAccounts()) {
                 emails.add(acc.getEmail());
             }
-            accountResponseBuilder.emails(emails).status(AccountsResponse.STATUS.OK).message("Success!");
+            accountsResponseBuilder.emails(emails).status(AccountsResponse.STATUS.OK).message("Success!");
         } else {
-            accountResponseBuilder.status(AccountsResponse.STATUS.ERROR).message("You must be an admin!");
+            accountsResponseBuilder.status(AccountsResponse.STATUS.ERROR).message("You must be an admin!");
         }
 
-        return accountResponseBuilder.build();
+        return accountsResponseBuilder.build();
     }
 }
