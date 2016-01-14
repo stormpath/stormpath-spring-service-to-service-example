@@ -17,7 +17,9 @@ public class CommunicationService {
         HttpClient httpClient = new HttpClient();
         int returnCode = httpClient.executeMethod(method);
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(method.getResponseBodyAsStream()));
+        BufferedReader br = new BufferedReader(
+            new InputStreamReader(method.getResponseBodyAsStream())
+        );
         StringBuffer buffer = new StringBuffer();
         String line;
         while(((line = br.readLine()) != null)) {

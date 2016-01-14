@@ -30,9 +30,14 @@ public class AdminService {
             for (Account acc : application.getAccounts()) {
                 emails.add(acc.getEmail());
             }
-            accountsResponseBuilder.emails(emails).status(AccountsResponse.STATUS.OK).message("Success!");
+            accountsResponseBuilder
+                .emails(emails).
+                status(AccountsResponse.STATUS.OK)
+                .message("Success!");
         } else {
-            accountsResponseBuilder.status(AccountsResponse.STATUS.ERROR).message("You must be an admin!");
+            accountsResponseBuilder
+                .status(AccountsResponse.STATUS.ERROR)
+                .message("You must be an admin!");
         }
 
         return accountsResponseBuilder.build();

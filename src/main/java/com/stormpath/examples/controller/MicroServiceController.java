@@ -65,7 +65,9 @@ public class MicroServiceController {
             .setId(UUID.randomUUID().toString());
 
         String secret = client.getApiKey().getSecret();
-        String token = jwtBuilder.signWith(SignatureAlgorithm.HS512, secret.getBytes("UTF-8")).compact();
+        String token = jwtBuilder.signWith(
+            SignatureAlgorithm.HS512, secret.getBytes("UTF-8")
+        ).compact();
 
         return communicationService.doRemoteRequest(remoteUri + REMOTE_SERVICE_ENDPOINT, token);
     }
@@ -79,11 +81,11 @@ public class MicroServiceController {
 
         // verify jwt
         String secret = client.getApiKey().getSecret();
-        Jws<Claims> claims = Jwts.parser().setSigningKey(secret.getBytes("UTF-8")).parseClaimsJws(token);
+        Jws<Claims> claims =
+            Jwts.parser().setSigningKey(secret.getBytes("UTF-8")).parseClaimsJws(token);
 
         String accountHref = claims.getBody().getSubject();
 
-        // This should come from cache if we've done our job
         Account account = client.getResource(accountHref, Account.class);
 
         return adminService.buildAccountsResponse(account);
