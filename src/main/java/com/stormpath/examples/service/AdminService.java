@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.stormpath.examples.model.AccountsResponse.STATUS;
+
 @Service
 public class AdminService {
     @Value("#{ @environment['stormpath.admin.group.href'] }")
@@ -26,20 +28,20 @@ public class AdminService {
     public AccountsResponse buildAccountsResponse(Account account) {
         AccountsResponseBuilder accountsResponseBuilder = AccountsResponseBuilder.newInstance();
         if (isAdmin(account)) {
-            List<String> emails = new ArrayList<String>();
-            for (Account acc : application.getAccounts()) {
-                emails.add(acc.getEmail());
-            }
-            accountsResponseBuilder
-                .emails(emails).
-                status(AccountsResponse.STATUS.OK)
-                .message("Success!");
+            List<String> emails = getAllEmails(application);
+            accountsResponseBuilder.emails(emails).status(STATUS.OK).message("Success!");
         } else {
-            accountsResponseBuilder
-                .status(AccountsResponse.STATUS.ERROR)
-                .message("You must be an admin!");
+            accountsResponseBuilder.status(STATUS.ERROR).message("You must be an admin!");
         }
 
         return accountsResponseBuilder.build();
+    }
+
+    private List<String> getAllEmails(Application application) {
+        List<String> emails = new ArrayList<String>();
+        for (Account acc : application.getAccounts()) {
+            emails.add(acc.getEmail());
+        }
+        return emails;
     }
 }
